@@ -1,6 +1,7 @@
 const { createNewProduct, getAllProducts, updateProduct, getOneProduct, deleteProductData } = require("../services/productsService")
 const ErrorHandler = require("../utils/errorHandler")
 const catchAsyncErrors =require('../middleware/catchAsyncErrors')
+const Product = require("../models/productModel")
 
 /* CREATE PRODUCT CONTROLLER */
 exports.createProduct = catchAsyncErrors(async (req,res,next)=>{
@@ -15,7 +16,8 @@ exports.createProduct = catchAsyncErrors(async (req,res,next)=>{
 
 /* GET PRODUCTS CONTROLLER */
 exports.getAllProducts = catchAsyncErrors(async (req,res,next) =>{
-    const products = await getAllProducts()
+    const query = req.query
+    const products = await getAllProducts(query)
 
     res.status(200).json({
         success: true,
@@ -23,8 +25,9 @@ exports.getAllProducts = catchAsyncErrors(async (req,res,next) =>{
     })
 })
 
-/* GET PRODUCT CONTROLLER */
+/* GET ONE PRODUCT CONTROLLER */
 exports.getOneProduct = catchAsyncErrors(async (req,res,next) =>{
+    const productCount = await Product.countDocuments()
     const id = req.params.id
     const product = await getOneProduct(id)
     if(!product){
@@ -32,7 +35,8 @@ exports.getOneProduct = catchAsyncErrors(async (req,res,next) =>{
     }
     res.status(200).json({
         success:true,
-        product
+        product,
+        productCount
     })
 })
 

@@ -1,4 +1,5 @@
 const Product = require('../models/productModel')
+const ApiFeatures = require('../utils/apiFeatures')
 
 /* CREATE PRODUCT SERVICE */
 const createNewProduct = async(product)=>{
@@ -7,8 +8,13 @@ const createNewProduct = async(product)=>{
 }
 
 /* GET PRODUCTS SERVICE */
-const getAllProducts = async() =>{
-    const products = await Product.find()
+const getAllProducts = async(query) =>{
+
+    const resultPerPage = 5
+    
+    const apiFeatures = new ApiFeatures(Product.find(),query).search().filter().pagination(resultPerPage)
+    
+    const products = await apiFeatures.query
     return products
 }
 
