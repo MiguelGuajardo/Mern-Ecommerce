@@ -2,7 +2,10 @@ const Product = require('../models/productModel')
 const ApiFeatures = require('../utils/apiFeatures')
 
 /* CREATE PRODUCT SERVICE */
-const createNewProduct = async(product)=>{
+const createNewProduct = async(req)=>{
+    req.body.user = req.user.id
+    let product = req.body
+
     const products = await Product.create(product)
     return products
 }

@@ -5,8 +5,7 @@ const Product = require("../models/productModel")
 
 /* CREATE PRODUCT CONTROLLER */
 exports.createProduct = catchAsyncErrors(async (req,res,next)=>{
-    const product = req.body
-    const productData = await createNewProduct(product)
+    const productData = await createNewProduct(req)
 
     res.status(201).json({
         success: true,
