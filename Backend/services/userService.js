@@ -1,4 +1,5 @@
 const User = require('../models/userModel')
+const { propfind } = require('../routes/userRoute')
 const ErrorHandler = require('../utils/errorHandler')
 const sendToken = require('../utils/jwtToken')
 const sendEmail = require('../utils/sendEmail')
@@ -118,10 +119,141 @@ const resetPassword = async(req,res,next) =>{
     sendToken(user,200,res)
 }
 
+const getOneUser = async(id)=>{
+    const user = await User.findById(id)
+    
+    return user
+}
+
+const updatePassword = async(id,oldPassword,newPassword,confirmPassword,res,next)=>{
+    const user = await User.findById(id).select("+password")
+
+    const isPasswordMatched = await user.comparePassword(oldPassword)
+
+    if(!isPasswordMatched){
+        return next(new ErrorHandler("Old password is incorrect",401))
+    }
+
+    if(newPassword !== confirmPassword){
+        return next(new ErrorHandler("Password does not match",400))
+    }
+
+    user.password = newPassword
+
+    await user.save()
+    
+    sendToken(user,200,res)
+}
+
+/* UPDATE USER PROFILE */
+const updateProfile = async(req,res)=>{
+    const {name, email} = req.body
+    const {id} = req.user
+
+    if(name === undefined || email === undefined){
+        res.status(500).json({
+            success:true,
+            message:"Validation failed: Please enter name or email"
+        })
+    }
+    
+    const newUserData = {
+        name: name,
+        email: email
+    }
+
+    
+    const user = await User.findByIdAndUpdate(id,newUserData,{
+        new:true,
+        runValidators:true,
+        useFindAndModify:false,
+    })
+
+    res.status(200).json({
+        success:true,
+        user
+    })
+}
+
+/* GET ALL USERS (ADMIN) */
+const getAllUsers = async(res)=>{
+    const users = await User.find()
+
+    res.status(200).json({
+        success:true,
+        users
+    })
+}
+/* GET SINGLE USER (ADMIN) */
+const getSingleUser = async(req,res,next)=>{
+    const user = await User.findById(req.params.id)
+
+    if(!user){
+        return next(new ErrorHandler(`User does not exist with Id: ${id}`))
+    }
+
+    res.status(200).json({
+        success:true,
+        user
+    })
+}
+/* UPDATE USER ROLE ADMIN*/
+const updateRole = async(req,res,next)=>{
+    const {name, email,role} = req.body
+    const id = req.params.id
+    
+    const newUserData = {
+        name: name,
+        email: email,
+        role: role
+    }
+
+    
+    const user = await User.findByIdAndUpdate(id,newUserData,{
+        new:true,
+        runValidators:true,
+        useFindAndModify:false,
+    })
+
+    if(!user){
+        return next(new ErrorHandler(`User does not exist with Id: ${id}`))
+    }
+
+    res.status(200).json({
+        success:true,
+        user
+    })
+}
+
+/* DELETE USER ADMIN*/
+const deleteUser = async(req,res,next)=>{
+    const id = req.params.id
+    
+    const user = await User.findById(id)
+
+    if(!user){
+        return next(new ErrorHandler(`User does not exist with Id: ${id}`))
+    }
+
+    await User.deleteOne(user)
+
+    res.status(200).json({
+        success:true,
+        message:"User deleted successfully"
+    })
+}
+
 module.exports ={
     registerNewUser,
     loginUser,
     logOut,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    getOneUser,
+    updatePassword,
+    updateProfile,
+    getAllUsers,
+    getSingleUser,
+    updateRole,
+    deleteUser
 }

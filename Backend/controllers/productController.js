@@ -1,4 +1,4 @@
-const { createNewProduct, getAllProducts, updateProduct, getOneProduct, deleteProductData } = require("../services/productsService")
+const { createNewProduct, getAllProducts, updateProduct, getOneProduct, deleteProductData, createProductReview, getAllReviews, deleteReview } = require("../services/productsService")
 const ErrorHandler = require("../utils/errorHandler")
 const catchAsyncErrors =require('../middleware/catchAsyncErrors')
 const Product = require("../models/productModel")
@@ -67,4 +67,28 @@ exports.deleteProduct = catchAsyncErrors(async(req,res,next)=>{
         success:true,
         message:"Product Delete Successfully"
     })
+})
+
+/* CREATE/UPDATE PRODUCT REVIEW */
+exports.createProductReview = catchAsyncErrors(async(req,res,next)=>{
+    const {rating,comment,productId} = req.body
+    const {_id,name} = req.user
+
+    await createProductReview(rating,comment,productId,_id,name,res)
+})
+
+/* GET ALL REVIEWS */
+exports.getAllReviews = catchAsyncErrors(async(req,res,next)=>{
+    const id = req.query.id
+    const product = await getAllReviews(id,next)
+
+    res.status(200).json({
+        success:true,
+        reviews: product.reviews
+    })
+})
+
+/* DELETE REVIEWS */
+exports.deleteReview = catchAsyncErrors(async(req,res,next)=>{
+    await deleteReview(req,res,next)
 })
