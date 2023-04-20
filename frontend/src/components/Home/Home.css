@@ -1,0 +1,124 @@
+.banner{
+    padding-top: 10rem;
+    background-image: linear-gradient(to right , #210062,#009FBD);
+    height: 88.8vh;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: flex-end;
+    color: white;
+}
+.banner h1{
+    margin: 5vmax;
+    font: 600 2.5vmax "Reboto";
+}
+.banner p{
+    font: 300 1.4vmax "Lucida sans";
+}
+.banner a button{
+    margin-top: 5vmax;
+    cursor: pointer;
+    background: white;
+    border: 1px solid white;
+    border-radius: 0;
+    padding: 1vmax;
+    transition: all 0.5s;
+    width: 9vmax;
+    font: 500 1vmax "Reboto";
+}
+.banner a button:hover{
+    background: rgba(255, 255, 255, 0);
+    color: white;
+}
+.banner::after{
+    content: "";
+    width: 100vw;
+    height: 100vmin;
+    background: #ffffff;
+    top: 0;
+    left: 0;
+    clip-path: polygon(100% 10%,0 100%,100% 100%);
+    max-width: 100%;
+}
+.homeHeading{
+    text-align: center;
+    font-family: "Reboto";
+    font-size: 1.4vmax;
+    border-bottom: 1px solid rgba(21,21,21,0.5);
+    width: 20vmax;
+    padding: 1vmax;
+    margin: 5vmax auto;
+    color: rgba(0,0,0,0.7);
+}
+.container{
+    display: flex;
+    margin: 2vmax auto;
+    width: 80vw;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+/* PRODUCTCARD */
+.productCard{
+    width: 16vmax;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: rgb(48,48,48);
+    margin: 2vmax;
+    transition: all 0.5s;
+    padding-bottom: 0.5vmax;
+}
+.productCard img{
+    width: 14vmax;
+}
+.productCard div{
+    margin: 0.5vmax;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+}
+.productCard div div{
+    display: flex;
+    flex-direction: row;
+}
+.productCard div span{
+    margin: 0.5vmax;
+    font: 300 0.7vmax "Reboto";
+}
+.productCard p{
+    display: flex;
+    justify-content: center;
+    font-family: "Reboto";
+    font-size: 1.2vmax;
+    margin: 1vmax 0.5vmax;
+}
+.productCard span{
+    margin: 0.5vmax;
+    color: tomato;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 1vmax;
+}
+.productCard:hover{
+    box-shadow: 0 0 5px rgba(15,15,15,0.26);
+
+    transform: translateY(-1vmax);
+}
+
+@media screen and (max-width: 600px){
+    .productCard p{
+        font-size: 1.7vmax;
+    }
+    .productCard div{
+        margin: 0vmax;
+        display: block;
+    }
+    .productCard span{
+        font-size: 1.5vmax;
+    }
+    .productCard div span{
+        margin: 0 0.5vmax;
+        font: 300 1vmax "Reboto";
+    }
+}
